@@ -1,3 +1,3 @@
 # test poject 
-Example code for some program language understanding!
+Example code for some program languages' understanding!
 
