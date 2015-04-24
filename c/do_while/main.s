@@ -1,7 +1,7 @@
 	.file	"main.c"
 	.section	.rodata
 .LC0:
-	.string	"i=%d"
+	.string	"i=%d, j=%d\n"
 	.text
 .globl main
 	.type	main, @function
@@ -15,15 +15,32 @@ main:
 	.cfi_def_cfa_register 6
 	subq	$16, %rsp
 	movl	$0, -4(%rbp)
-.L2:
+	movl	$0, -8(%rbp)
+.L4:
 	addl	$1, -4(%rbp)
+	movl	-8(%rbp), %edx
 	movl	-4(%rbp), %eax
 	movl	%eax, %esi
 	movl	$.LC0, %edi
 	movl	$0, %eax
 	call	printf
+	movl	-4(%rbp), %eax
+	movl	%eax, %edx
+	sarl	$31, %edx
+	shrl	$31, %edx
+	addl	%edx, %eax
+	andl	$1, %eax
+	subl	%edx, %eax
+	cmpl	$1, %eax
+	je	.L6
+.L2:
+	addl	$1, -8(%rbp)
+	jmp	.L3
+.L6:
+	nop
+.L3:
 	cmpl	$9, -4(%rbp)
-	jle	.L2
+	jle	.L4
 	leave
 	ret
 	.cfi_endproc
